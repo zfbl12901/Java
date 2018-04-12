@@ -84,7 +84,7 @@ public class BOObject1CSV extends BOCSV{
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "BOEuridCSV [string1=" + super.string1 + ", string2=" + super.string2 + ", string3=" + this.string3 
+		return "BOObject1CSV [string1=" + super.string1 + ", string2=" + super.string2 + ", string3=" + this.string3 
 				+ ", date1=" + super.date1 + ", date2=" + super.date2 + "]";
 	}
 			
