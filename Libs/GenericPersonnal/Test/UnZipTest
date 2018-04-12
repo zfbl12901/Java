@@ -1,0 +1,30 @@
+package ******.utils.test;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.Test;
+
+import utils.UnZip;
+
+public class UnZipTest {
+
+	UnZip unzip = new UnZip();
+
+	@Test
+	public void testUnZipIt() throws IOException {
+		//Given
+		String inputFile  = "temp/filezip.zip";
+		String outputFile = "temp/outfile";
+		File file = new File(outputFile);
+				
+		//When
+		unzip.unZipIntoFolder(inputFile, outputFile);
+		
+		//Then
+		assertTrue( (file.isDirectory() && file.list().length>0) ? true : false);
+	}
+
+}
