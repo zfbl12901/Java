@@ -1,4 +1,4 @@
-package com.nordnet.synchronisedomaine.bo;
+package *****************;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
