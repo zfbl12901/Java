@@ -1,0 +1,60 @@
+	public static List<String> extractXMLFieldsfromString(String xml, String beginFieldSeparator,
+			String endFieldSeparator) {
+		logger.info("Enter Outil.extractXMLFieldsfromString method.");
+
+	    // specify that we want to search for two groups in the string
+	    Pattern p = Pattern.compile(beginFieldSeparator + "(.*?)" + endFieldSeparator);
+	    Matcher m = p.matcher(xml);
+    	List<String> metadateValues = new ArrayList<String>();
+	    // if our pattern matches the string, we can try to extract our groups
+	    while (m.find())
+	    {
+	      metadateValues.add(m.group(1));
+	    }
+        logger.info("Finished Outil.extractXMLFieldsfromString method.");
+		return metadateValues;
+	}
+
+	public static String extractFieldsfromString(String xml, String beginFieldSeparator, String endFieldSeparator) {
+		logger.info("Enter Outil.extractFieldsfromString method.");
+	    // specify that we want to search for two groups in the string
+	    Pattern p = Pattern.compile(beginFieldSeparator + "(.*?)" + endFieldSeparator);
+	    Matcher m = p.matcher(xml);
+	    m.find();
+        logger.info("Finished Outil.extractFieldsfromString method.");
+		return m.group(1);
+	}
+
+	public static String prepareChangeCommand(String xml, int i) {
+		logger.info("Enter Outil.prepareChangeCommand method.");
+		
+		String beginValueFieldSeparator = "&quot;";
+		String endValueFieldSeparator = "&quot; /";
+		String beginParamFieldSeparator = "";
+		String endParamFieldSeparator = " value=";
+		StringBuilder cmd = new StringBuilder();
+		cmd.append("change" + i + "\n");
+		cmd.append(extractFieldsfromString(xml, beginParamFieldSeparator, endParamFieldSeparator) + "!");
+		cmd.append(extractFieldsfromString(xml, beginValueFieldSeparator, endValueFieldSeparator) + "\n");
+		
+        logger.info("Finished Outil.prepareChangeCommand method.");
+		return cmd.toString();
+	}
+
+	public static String retrieveProxyCommandFomMetaDataChanges(String xml, int i) {
+		logger.info("Enter Outil.retrieveProxyCommandFomMetaDataChanges method.");
+		String beginMetaDataFieldSeparator = "&lt;";
+		String endMetaDataFieldSeparator = "&gt;";
+    	List<String> metadateValues = new ArrayList<String>();
+    	StringBuilder cmd = new StringBuilder();
+    	metadateValues = extractXMLFieldsfromString(xml, beginMetaDataFieldSeparator, endMetaDataFieldSeparator);
+        for(String metadateValue : metadateValues) {
+        	if(!metadateValue.contains("meta")){
+            	cmd.append(prepareChangeCommand(metadateValue, i));
+            	i++;
+        	}
+        }
+        logger.info("Finished Outil.retrieveProxyCommandFomMetaDataChanges method.");
+		return cmd.toString();
+	}
+	
