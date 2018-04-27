@@ -1,0 +1,88 @@
+	@Test
+	public void testExtractXMLFieldsfromString2SeperatorsOK() {
+		//Given
+		String xml = "<metaData value=\"&lt;MetaData&gt;&lt;SOrA value=&quot;S&quot; /&gt;";
+		String beginFieldSeparator = "&lt;";
+		String endFieldSeparator = "&gt;";
+		List<String> xmlFields = new ArrayList<String>();
+
+		//When
+		xmlFields = Outil.extractXMLFieldsfromString(xml, beginFieldSeparator, endFieldSeparator);
+		
+		//Then
+		assertTrue(xmlFields.get(0).equals("MetaData") && xmlFields.get(1).equals("SOrA value=&quot;S&quot; /"));
+	}
+	
+	@Test
+	public void testExtractfieldsfromStringExtractValueOK() {
+		//Given
+		String xml = "SOrA value=&quot;S&quot; /";
+		String beginFieldSeparator = "&quot;";
+		String endFieldSeparator = "&quot; /";
+		String extractedField = "";
+
+		//When
+		extractedField = Outil.extractFieldsfromString(xml, beginFieldSeparator, endFieldSeparator);
+		
+		//Then
+		assertTrue(extractedField.equals("S"));
+	}
+	
+	@Test
+	public void testExtractXMLFieldsfromStringBeginSeperatorOK() {
+		//Given
+		String xml = "SOrA value=&quot;S&quot; /";
+		String beginFieldSeparator = "&quot;";
+		String endFieldSeparator = "";
+		String extractedField = "";
+
+		//When
+		extractedField = Outil.extractFieldsfromString(xml, beginFieldSeparator, endFieldSeparator);
+		
+		//Then
+		assertTrue(extractedField.equals("S&quot; /"));
+	}
+	
+	@Test
+	public void testExtractXMLFieldsfromStringParamMetadataOK() {
+		//Given
+		String xml = "SOrA value=&quot;S&quot; /";
+		String beginFieldSeparator = "";
+		String endFieldSeparator = " value=";
+		String extractedField = "";
+
+		//When
+		extractedField = Outil.extractFieldsfromString(xml, beginFieldSeparator, endFieldSeparator);
+		
+		//Then
+		assertTrue(extractedField.equals("SOrA"));
+	}
+	
+	@Test
+	public void testPrepareChangeCommandWithMetaDataOK() {
+		//Given
+		String xml = "SOrA value=&quot;S&quot; /";
+		int i = 5;
+		String cmd = "";
+
+		//When
+		cmd = Outil.prepareChangeCommand(xml, i);
+		
+		//Then
+		assertTrue(cmd.equals("change5\nSOrA!S\n"));
+	}
+	
+	@Test
+	public void testRetrieveProxyCommandFomMetaDataChanges() {
+		//Given
+		String xml = "<metaData value=\"&lt;MetaData&gt;&lt;SOrA value=&quot;S&quot; /&gt;&lt;typeTitulaire value=&quot;PM&quot; /&gt;";
+		int i = 5;
+		String cmd = "";
+
+		//When
+		cmd = Outil.retrieveProxyCommandFomMetaDataChanges(xml, i);
+		
+		//Then
+		assertTrue(i == 6);
+		assertTrue(cmd.equals("change5\nSOrA!S\nchange6\ntypeTitulaire!PM\n"));
+	}
